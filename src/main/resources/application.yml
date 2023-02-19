@@ -1,0 +1,7 @@
+spring:
+  config:
+    import: 'classpath:db.properties'
+  datasource:
+    url: ${db.host}
+    username: ${db.username}
+    password: ${db.password}
