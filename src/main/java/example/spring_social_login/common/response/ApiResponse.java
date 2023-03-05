@@ -27,9 +27,9 @@ public class ApiResponse<T> {
     private final ApiResponseHeader header;
     private final Map<String, T> body;
 
-    public static <T> ApiResponse<T> success(String name, T body) {
+    public static <T> ApiResponse<T> success(T body) {
         Map<String, T> map = new HashMap<>();
-        map.put(name, body);
+        map.put("data", body);
 
         return new ApiResponse(new ApiResponseHeader(SUCCESS, SUCCESS_MESSAGE), map);
     }

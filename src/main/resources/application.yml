@@ -1,7 +1,15 @@
 spring:
   config:
     import: 'classpath:db.properties'
+  mvc:
+    view:
+      prefix: "/WEB-INF/jsp/"
+      suffix: .jsp
   datasource:
     url: ${db.host}
     username: ${db.username}
     password: ${db.password}
+
+jwt:
+  secret: your_jwt_secret
+  expiration: 1000 * 60 * 60 * 24 # 1 day in milliseconds

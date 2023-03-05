@@ -1,7 +1,11 @@
-package example.spring_social_login.apis.auth;
+package example.spring_social_login.apis.oauth2;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
+import example.spring_social_login.apis.oauth2.dtos.kakao.KakaoUserProfileDto;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -9,7 +13,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Service
-public class AuthService {
+public class OAuth2Service {
+    public KakaoUserProfileDto getUserKakaoProfile(String accessToken) throws IOException {
+        String endpointUrl = "https://kapi.kakao.com/v2/user/me";
+        URL url = new URL(endpointUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            KakaoUserProfileDto profile = mapper.readValue(conn.getInputStream(), KakaoUserProfileDto.class);
+            return profile;
+        } catch (JsonParseException e) {
+            throw new IOException("Failed to parse JSON response", e);
+        } catch (JsonMappingException e) {
+            throw new IOException("Failed to map JSON response to object", e);
+        }
+    }
+
     public String getKaKaoAccessToken(String code) {
         String access_Token = "";
         String refresh_Token = "";
